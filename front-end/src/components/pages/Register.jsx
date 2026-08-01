@@ -2,10 +2,14 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Login = ({ user, setUser }) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+const Register = ({user}) => {
+  
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false)
 
   const handleSubmit = async (e) => {
@@ -21,12 +25,23 @@ const Login = ({ user, setUser }) => {
       alert("voce precisa preechenr o email e a senha");
     }
   };
-  if (redirect || user) return <Navigate to="/"/>
+  if (redirect) return <Navigate to="/"/>
   return (
     <section className="flex w-full items-center">
       <div className="mx-auto flex w-full max-w-96 flex-col items-center gap-4 px-8">
         <h1 className="text-3xl font-bold">Faca seu Login</h1>
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-2">
+          <input
+            placeholder="digite seu nome"
+            className="w-full rounded-full border border-gray-300 px-4 py-2"
+            type="text"
+            name=""
+            id=""
+            value={name}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          />
           <input
             placeholder="digite seu email"
             className="w-full rounded-full border border-gray-300 px-4 py-2"
@@ -50,18 +65,18 @@ const Login = ({ user, setUser }) => {
             }}
           />
           <button className="bg-primary-400 w-full cursor-pointer rounded-full border border-gray-300 py-2 font-semibold text-white">
-            Login
+            Cadastrar
           </button>
         </form>
         <p>
-          Ainda nao tem conta?{" "}
-          <a className="font-semibold underline" href="#">
-            Resgistre-se aqui
-          </a>
+          Ja tem um conta?{" "}
+          <Link to="/login" className="font-semibold underline" href="#">
+            Entre aqui
+          </Link>
         </p>
       </div>
     </section>
   );
 };
 
-export default Login;
+export default Register;
