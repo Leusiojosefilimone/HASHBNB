@@ -1,9 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+import { UseUserContext } from "./context/UserContext";
 
-function AccontProfile({ user, setUser }) {
+function AccontProfile() {
   const [redirect, setRedirect] = React.useState(false);
+  const {user, setUser} = UseUserContext()
 
   const logout = async () => {
    
@@ -24,7 +26,7 @@ function AccontProfile({ user, setUser }) {
     return <Navigate to={"/"} />;
   }
   if (!user) return <></>;
-  
+
   return (
     <div className="flex flex-col gap-1">
       <p>Logado como {user.email}</p>

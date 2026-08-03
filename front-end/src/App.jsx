@@ -14,7 +14,7 @@ axios.defaults.baseURL = "http://localhost:3000";
 
 function App() {
   return (
-    <>
+    <div className="max-w-full">
       <UserContextProvider>
         <BrowserRouter>
           <Header />
@@ -26,13 +26,13 @@ function App() {
             />
             <Route path="/register" element={<Register  />} />
             <Route
-              path="/account/:subpage?"
+              path="/account/:subpage/:action?"
               element={<Account />}
             />
           </Routes>
         </BrowserRouter>
       </UserContextProvider>
-    </>
+    </div>
   );
 }
 
