@@ -2,11 +2,14 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { UseUserContext } from "../context/UserContext";
 
-const Login = ({ user, setUser }) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false)
+  const {user, setUser} = UseUserContext()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,9 +58,9 @@ const Login = ({ user, setUser }) => {
         </form>
         <p>
           Ainda nao tem conta?{" "}
-          <a className="font-semibold underline" href="#">
-            Resgistre-se aqui
-          </a>
+           <Link to="/register" className="font-semibold underline" href="#">
+            Registe-se aqui
+          </Link>
         </p>
       </div>
     </section>

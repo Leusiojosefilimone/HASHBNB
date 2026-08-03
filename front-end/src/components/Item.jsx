@@ -1,11 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Item = () => {
   return (
-    <a href="./" className="flex flex-col gap-3">
-      <img
+  
+    <Link to="/item" className="flex flex-col p-2 gap-0.5">
+        <img
         className="aspect-square rounded-2xl object-cover"
-        src="./image.jpg"
+        src="/image.png"
         alt="image"
       />
       <h3 className="font-semibold text-xl">Lorem ipsum dolor </h3>
@@ -16,7 +18,8 @@ const Item = () => {
       <p>
         <span>590</span>
       </p>
-    </a>
+    </Link>
+    
   );
 };
 

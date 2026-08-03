@@ -3,33 +3,39 @@ import { useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { UseUserContext } from "../context/UserContext";
 
-const Register = ({user}) => {
-  
-
+const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState(false)
+  const [redirect, setRedirect] = useState(false);
+  const {setUser} = UseUserContext()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email && password) {
-      const { data: userDoc } = await axios.post("/users/login", {
-        email,
-        password,
-      });
-      setUser(userDoc);
-      setRedirect(true)
+    if (email && password && name) {
+      try {
+        const { data: userDoc } = await axios.post("/users/register", {
+          name,
+          email,
+          password,
+        });
+        console.log(userDoc);
+        setUser(userDoc);
+        setRedirect(true);
+      } catch (error) {
+        alert(`deu um erro ao cadastrar o usuario: ${JSON.stringify(error)}`);
+      }
     } else {
-      alert("voce precisa preechenr o email e a senha");
+      alert("voce precisa preechenr o nome, o email e a senha");
     }
   };
-  if (redirect) return <Navigate to="/"/>
+  if (redirect) return <Navigate to="/" />;
   return (
     <section className="flex w-full items-center">
       <div className="mx-auto flex w-full max-w-96 flex-col items-center gap-4 px-8">
-        <h1 className="text-3xl font-bold">Faca seu Login</h1>
+        <h1 className="text-3xl font-bold">Faca seu Cadastro</h1>
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-2">
           <input
             placeholder="digite seu nome"
@@ -39,7 +45,7 @@ const Register = ({user}) => {
             id=""
             value={name}
             onChange={(e) => {
-              setEmail(e.target.value);
+              setName(e.target.value);
             }}
           />
           <input
