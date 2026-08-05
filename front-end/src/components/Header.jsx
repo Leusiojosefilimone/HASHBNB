@@ -7,7 +7,7 @@ const Header = () => {
 
   return (
     <div className="shadow-md">
-      <div className="mx-auto flex max-w-6xl justify-between px-8 py-2">
+      <div className="mx-auto flex max-w-6xl justify-between px-2 py-2">
         <div className="flex h-10 items-center">
           <img
             className="h-10"

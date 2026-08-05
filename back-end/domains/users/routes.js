@@ -1,28 +1,22 @@
 import { Router } from "express";
-import { connectDB } from "../../config/db.js";
+import { conectDB } from "../../config/db.js";
 import User from "./model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { jwtSign, jwtVerify } from "../../utils/jwt.js";
 import "dotenv/config";
 
 const bcryptsalt = bcrypt.genSaltSync();
 const router = Router();
-const { JWT_SECRET_KEY } = process.env;
+//const { JWT_SECRET_KEY } = process.env;
 
 router.get("/profile", async (req, res) => {
-  const { token } = req.cookies;
-  if (token) {
-    jwt.verify(token, JWT_SECRET_KEY, {}, (err, userInfo) => {
-      if (err) throw err;
-      res.json(userInfo);
-    });
-  } else {
-    res.json(null);
-  }
+  const userInfo = await jwtVerify(req);
+  res.json(userInfo);
 });
 
 router.get("/", async (req, res) => {
-  connectDB();
+  conectDB();
   try {
     const userDoc = await User.find();
     res.json(userDoc);
@@ -32,7 +26,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  connectDB();
+  conectDB();
   const { name, email, password } = req.body;
   const encryptedPassword = bcrypt.hashSync(password, bcryptsalt);
 
@@ -45,22 +39,24 @@ router.post("/register", async (req, res) => {
 
     const { _id } = newUserDoc;
     const newUserObj = { name, email, _id };
-    jwt.sign(newUserObj, JWT_SECRET_KEY, {}, (err, token) => {
-      if (err) throw err;
-      res.cookie("token", token).json(newUserObj);
-    });
+    try {
+           const token = await jwtSign(newUserObj);
+            res.cookie("token", token).json(newUserObj);
+        } catch (error) {
+         res.status(500).json("error ao asinar com JWT",error) 
+        }
+   
   } catch (error) {
-    res.status(500).json({ message: "Erro ao criar usuário" });
+    res.status(500).json({ message: "Erro ao criar usuário", error});
   }
 });
 
 router.post("/login", async (req, res) => {
-  connectDB();
+  conectDB();
   const { email, password } = req.body;
 
   try {
     const userDoc = await User.findOne({ email });
-    console.log(userDoc);
     const { name, _id } = userDoc;
 
     if (userDoc) {
@@ -68,20 +64,16 @@ router.post("/login", async (req, res) => {
 
       if (correctPassword) {
         const newUserObj = { name, email, _id };
-
-        jwt.sign(newUserObj, JWT_SECRET_KEY, {}, (error, token) => {
-          if (error) {
-            console.error(error);
-            res.status(400).json("deu erro");
-            return;
-          }
-           res.cookie("token", token).json(newUserObj);
-        });
-        
-       
+        try {
+           const token = await jwtSign(newUserObj);
+            res.cookie("token", token).json(newUserObj);
+        } catch (error) {
+         res.status(500).json("error ao asinar com JWT",error) 
+        }
       } else {
         res.json("senha invalida!");
       }
+
     } else {
       res.json(400).json("usuario nao encontrado");
     }

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import Perks from "./Perks";
 
 const NewPlace = () => {
+ 
   const [title, setTitle] = useState("");
-  const [adress, setAdress] = useState("");
   const [photo, setPhoto] = useState("");
+  const [adress, setAdress] = useState("");
   const [info, setInfo] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -20,8 +21,8 @@ const NewPlace = () => {
   return (
     <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <label htmlFor="title" className="ml-3 text-2xl font-semibold">
           Titulo
+        <label htmlFor="title" className="ml-3 text-2xl font-semibold">
         </label>
         <input
           type="text"
@@ -195,7 +196,7 @@ const NewPlace = () => {
             strokeLinejoin="round"
             d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
           />
-        </svg>Salvar informacoes</button>
+        </svg>Salvar Informacoes</button>
          </div>
         </div>
          

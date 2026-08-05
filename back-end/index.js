@@ -1,6 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import userRoutes from"./domains/users/routes.js"
+import placeRoutes from "./domains/places/routes.js"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 
@@ -14,6 +15,7 @@ app.use(cors({
 
 const { PORT } = process.env;
 app.use("/users", userRoutes)
+app.use("/places", placeRoutes)
 
 
 app.listen(PORT, () => {
