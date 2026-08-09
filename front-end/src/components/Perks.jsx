@@ -1,15 +1,15 @@
 import React from "react";
 import { useState } from "react";
 
-const Perks = () => {
-     const [perks, setPerks] = useState([]);
+const Perks = ({perks, setPerks}) => {
+   
     const handleClick = (target) => {
         if (target.checked) {
             setPerks((prev) => [...prev, target.id]);
     }else {
         setPerks((prev) => prev.filter((perk) => perk !== target.id));
     }}
-    console.log(perks)
+   
   return (
     <div className="flex flex-col gap-2">
       <h3 htmlFor="title" className="ml-3 text-2xl font-semibold">

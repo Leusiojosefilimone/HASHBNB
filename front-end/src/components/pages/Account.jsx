@@ -1,12 +1,12 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import AccontProfile from "../accontProfile";
 import { UseUserContext } from "../context/UserContext";
 import AccountPlaces from "../AccountPlaces";
 
 const Account = () => {
   const { subpage } = useParams();
-  const {user, setUser} = UseUserContext()
+  const {user, setUser, ready} = UseUserContext();
 
   const buttonClass = (targetBtn) => {
     let finalClass =
@@ -15,6 +15,10 @@ const Account = () => {
 
     return finalClass;
   };
+
+  if(!user && ready)return <Navigate to="/login"/>
+  
+
   return (
     <section className="p-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8">

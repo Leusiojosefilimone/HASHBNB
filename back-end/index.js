@@ -1,22 +1,7 @@
-import express from "express";
 import "dotenv/config";
-import userRoutes from"./domains/users/routes.js"
-import placeRoutes from "./domains/places/routes.js"
-import cors from "cors"
-import cookieParser from "cookie-parser";
-
-const app = express();
-app.use(express.json())
-app.use(cookieParser())
-app.use(cors({
-  origin:"http://localhost:5173",
-  credentials: true
-}));
+import { app } from "./server.js";
 
 const { PORT } = process.env;
-app.use("/users", userRoutes)
-app.use("/places", placeRoutes)
-
 
 app.listen(PORT, () => {
   console.log(`A sevidor rodando na porta ${PORT}`);

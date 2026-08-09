@@ -4,7 +4,9 @@ import "dotenv/config";
 const { JWT_SECRET_KEY } = process.env;
 
 export const jwtVerify = (req) => {
+  
   const { token } = req.cookies;
+
   if (token) {
     return new Promise((resolve, reject) => {
       jwt.verify(token, JWT_SECRET_KEY, {}, (err, userInfo) => {

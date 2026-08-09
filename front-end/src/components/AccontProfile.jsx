@@ -8,7 +8,6 @@ function AccontProfile() {
   const {user, setUser} = UseUserContext()
 
   const logout = async () => {
-   
     try {
       await axios.post("/users/logout");
       setUser(null);
