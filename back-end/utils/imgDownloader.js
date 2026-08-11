@@ -9,12 +9,7 @@ export const downloadImage = async (link, destination) => {
   const filename = `${Date.now()}.${extension}`;
   const fullPath = `${destination}${filename}`
 
-
-  
-  const options = {
-    url: link,
-    dest: fullPath, // Save to /path/to/dest/image.jpg
-  };
+  const options = { url: link, dest: fullPath, };
 
   try {
    await download.image(options);

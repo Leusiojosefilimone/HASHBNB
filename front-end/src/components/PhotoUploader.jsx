@@ -1,17 +1,20 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-//import image from "../../../back-end/tmp/1786208390283.jpg";
+
 
 const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
+
   const upLoadPhotoLink = async (e) => {
+    console.log("estou aqui")
     if (photoLink) {
       try {
-        const { data: filename } = await axios.post("/places/upload/link", {
+        const { data: imageUrl } = await axios.post("/places/upload/link", {
           link: photoLink,
         });
-        console.log(photo);
-        setPhoto((prevValue) => [...prevValue, filename]);
+       
+        setPhoto((prevValue) => [...prevValue, imageUrl]);
+         console.log(photo);
         console.log("imagem enviada com sucesso");
       } catch (error) {
         console.error(JSON.stringify(error));
@@ -20,7 +23,33 @@ const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
     } else {
       alert("adicione um link de imagem");
     }
+
   };
+  const uploadPhoto = async(e) => {
+    const {files} = e.target
+    const formData = new FormData()
+    const filesArry = [...files]
+
+    filesArry.forEach(file => formData.append('files', file))
+
+      try {
+        const {data:imageUrl} = await axios.post("/places/upload", formData, {
+      headers:{
+        "Content-Type": "multiplepart/form-data"
+      }
+    }) 
+        setPhoto((prevValue) => [...prevValue, imageUrl]);
+         console.log(photo);
+        console.log("imagem enviada com sucesso");
+      } catch (error) {
+        console.error(JSON.stringify(error));
+        console.log("deu erro ao enviar a imagem");
+      }
+
+   
+    
+
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,7 +82,7 @@ const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
         console.log(photo),
           <img
          className="aspect-square rounded-2xl object-cover"
-         src={`${axios.defaults.baseURL}/tmp/${photo}`}
+         src={photo}
          key={photo}
          alt="image do lugar"/>
          
@@ -62,7 +91,7 @@ const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
           htmlFor="photo"
           className="flex aspect-square cursor-pointer items-center justify-center gap-2 rounded-2xl border border-gray-300"
         >
-          <input type="file" name="" id="photo" className="hidden" />
+          <input type="file" multiple onChange={uploadPhoto} name="" id="photo" className="hidden" />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

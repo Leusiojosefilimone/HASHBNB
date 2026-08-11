@@ -7,7 +7,7 @@ const Header = () => {
 
   return (
     <div className="shadow-md">
-      <div className="mx-auto flex max-w-6xl justify-between px-2 py-2">
+      <div className="mx-auto flex max-w-6xl justify-between px-2 py-4">
         <div className="flex h-10 items-center">
           <img
             className="h-10"
@@ -39,7 +39,7 @@ const Header = () => {
           </div>
         </div>
         <div>
-          <Link to={user ? "/account/profile" :"/login"} className="flex items-center gap-2 rounded-full border border-gray-300 py-1 pr-4 pl-6 text-gray-600 shadow-sm">
+          <Link to={user ? "/account/profile" :"/login"} className="flex items-center gap-2 rounded-full border border-gray-300 py-1.5 pr-4 pl-6 text-gray-600 shadow-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
