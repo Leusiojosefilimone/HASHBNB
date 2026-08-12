@@ -4,7 +4,6 @@ import axios from "axios";
 
 
 const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
-
   const upLoadPhotoLink = async (e) => {
     console.log("estou aqui")
     if (photoLink) {
@@ -33,13 +32,13 @@ const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
     filesArry.forEach(file => formData.append('files', file))
 
       try {
-        const {data:imageUrl} = await axios.post("/places/upload", formData, {
+        const {data:fileURLArry} = await axios.post("/places/upload", formData, {
       headers:{
         "Content-Type": "multiplepart/form-data"
       }
     }) 
-        setPhoto((prevValue) => [...prevValue, imageUrl]);
-         console.log(photo);
+        fileURLArry.map(file => setPhoto((prevValue) => [...prevValue, file.url]))
+         console.log(fileURLArry);
         console.log("imagem enviada com sucesso");
       } catch (error) {
         console.error(JSON.stringify(error));

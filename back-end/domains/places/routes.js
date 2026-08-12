@@ -67,12 +67,14 @@ router.post("/upload", multerUpload().array("files", 10), async (req, res) => {
     files.forEach(async (file, index) => {
       try {
          const fileURL = await cloudinaryUpload(file.filename);
-          fileURLArry.push(fileURL);
+         if(fileURL){
+             fileURLArry.push(fileURL);
 
-          if (index === files.length - 1){
-          resolve (fileURL)
-
+             if (index === files.length - 1){
+          resolve (fileURLArry)
           }
+         }
+          
       } catch (error) {
         console.error("deu algun erro ao salvar a imagem no cloudinary ;",err);
           reject(err)
@@ -80,7 +82,9 @@ router.post("/upload", multerUpload().array("files", 10), async (req, res) => {
     });
   });
   const fileURLArryResolved = await filesPromise;
+  console.log(fileURLArryResolved)
   res.json(fileURLArryResolved)
+ 
 });
 
 export default router;
