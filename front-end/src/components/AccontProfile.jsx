@@ -12,7 +12,6 @@ function AccontProfile() {
       await axios.post("/users/logout");
       setUser(null);
       setRedirect(true);
-      console.log(redirect)
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }

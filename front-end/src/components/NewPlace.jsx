@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Perks from "./Perks";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { UseUserContext } from "./context/UserContext";
 import PhotoUploader from "./PhotoUploader";
+import { useEffect } from "react";
 
 const NewPlace = () => {
+   const [place, setPlace] = useState("");
   const [title, setTitle] = useState("");
   const [redirect, setredirect] = useState(false);
   const [photoLink, setPhotoLink] = useState("");
@@ -19,6 +21,29 @@ const NewPlace = () => {
   const [guest, setGuest] = useState("");
   const [perks, setPerks] = useState([]);
   const { user } = UseUserContext();
+const {id} = useParams()
+  useEffect(() => {
+     
+    if (id) {
+      const axiosGet = async () => {
+        const { data } = await axios.get(`/places/${id}`);
+        console.log(data);
+        setPlace(data);
+        setTitle(data.title);
+        setPhoto(data.photo);
+        setDescription(data.description)
+        setAdress(data.adress);
+        setPrice(data.price);
+        setCheckin(data.checkin);
+        setExtras(data.extras);
+        setCheckout(data.checkout);
+        setGuest(data.guest);
+        setPerks(data.perks);
+      };
+       axiosGet();
+    }
+   
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +51,7 @@ const NewPlace = () => {
     if (
       title &&
       adress &&
+      photo.length > 0 &&
       description &&
       price &&
       checkin &&
@@ -34,8 +60,10 @@ const NewPlace = () => {
       guest
     ) {
       console.log("todos estao preenchidos");
-      try {
-        const newPlace = axios.post("/places", {
+     
+       if(id){
+         try {
+         const modifiedPlace = axios.put(`/places/${id}`, {
           owner: user._id,
           title,
           photo,
@@ -48,12 +76,34 @@ const NewPlace = () => {
           checkout,
           guest,
         });
-        console.log(NewPlace);
-        setredirect(true);
-      } catch (error) {
+         } catch (error) {
+        console.error(JSON.stringify(error));
+        alert("deu erro ao actualizar o novo lugar");
+      }
+       }else{ 
+        try{
+         const newPlace = axios.post("/places", {
+          owner: user._id,
+          title,
+          photo,
+          adress,
+          description,
+          price,
+          perks,
+          checkin,
+          extras,
+          checkout,
+          guest,
+        });
+        } catch (error) {
         console.error(JSON.stringify(error));
         alert("deu erro ao criar o novo lugar");
       }
+
+       }
+        console.log(NewPlace);
+        setredirect(true);
+     
     } else {
       alert("preencha todas informacoes");
     }
@@ -63,8 +113,8 @@ const NewPlace = () => {
   return (
     <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
       <div className="flex flex-col gap-2">
-        Titulo
-        <label htmlFor="title" className="ml-3 text-2xl font-semibold"></label>
+        
+        <label htmlFor="title" className="ml-3 text-2xl font-semibold">Titulo</label>
         <input
           type="text"
           className="rounded-full border border-gray-300 py-2 pr-4 pl-6 text-gray-600 shadow-sm"

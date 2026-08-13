@@ -1,22 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Item = () => {
+const Item = ({place}) => {
   return (
   
     <Link to="/item" className="flex flex-col p-2 gap-0.5">
         <img
         className="aspect-square rounded-2xl object-cover"
-        src="/image.png"
+        src={place.photo[0]}
         alt="image"
       />
-      <h3 className="font-semibold text-xl">Lorem ipsum dolor </h3>
+      <h3 className="font-semibold text-xl">{place.title}</h3>
       <p className="truncate text-gray-600">
-        color sit amet consectetur adipisicing elit. harum accusamus
-        quae, consequatur dolorem autem vero labor
+        {place.description}
       </p>
       <p>
-        <span>590</span>
+        <span>{place.price}</span>
       </p>
     </Link>
     

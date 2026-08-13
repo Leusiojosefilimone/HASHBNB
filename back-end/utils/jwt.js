@@ -25,7 +25,7 @@ export const jwtVerify = (req) => {
 
 export const jwtSign = (newUserObj) => {
   return new Promise((resolve, reject) => {
-         jwt.sign(newUserObj, JWT_SECRET_KEY, {}, (error, token) => {
+         jwt.sign(newUserObj, JWT_SECRET_KEY, {expiresIn: "1d"}, (error, token) => {
               if (error) {
                 console.error("deu erro ao criar token:",error);
                 reject(error)

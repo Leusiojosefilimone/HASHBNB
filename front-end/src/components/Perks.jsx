@@ -23,6 +23,7 @@ const Perks = ({perks, setPerks}) => {
           <input
             type="checkbox"
             id="wifi"
+            checked={perks.wifi}
            onChange={(e) => handleClick(e.target)}
           />
           <svg

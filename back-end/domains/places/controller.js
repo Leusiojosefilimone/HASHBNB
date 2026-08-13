@@ -37,6 +37,7 @@ export const cloudinaryUpload = async function (filename) {
     api_secret: CLOUDINARY_API_SECRET, // Click 'View API Keys' above to copy your API secret
   });
 
+  
   const url = cloudinary.uploader.upload(
     `${__dirname}/tmp/${filename}`,
     { folder: "hashbnb" },

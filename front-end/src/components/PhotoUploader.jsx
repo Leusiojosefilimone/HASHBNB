@@ -2,18 +2,17 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 
-
 const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
   const upLoadPhotoLink = async (e) => {
-    console.log("estou aqui")
+    console.log("estou aqui");
     if (photoLink) {
       try {
         const { data: imageUrl } = await axios.post("/places/upload/link", {
           link: photoLink,
         });
-       
+
         setPhoto((prevValue) => [...prevValue, imageUrl]);
-         console.log(photo);
+        console.log(photo);
         console.log("imagem enviada com sucesso");
       } catch (error) {
         console.error(JSON.stringify(error));
@@ -22,32 +21,42 @@ const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
     } else {
       alert("adicione um link de imagem");
     }
-
   };
-  const uploadPhoto = async(e) => {
-    const {files} = e.target
-    const formData = new FormData()
-    const filesArry = [...files]
+  const uploadPhoto = async (e) => {
+    const { files } = e.target;
+    const formData = new FormData();
+    const filesArry = [...files];
 
-    filesArry.forEach(file => formData.append('files', file))
+    filesArry.forEach((file) => formData.append("files", file));
 
-      try {
-        const {data:fileURLArry} = await axios.post("/places/upload", formData, {
-      headers:{
-        "Content-Type": "multiplepart/form-data"
-      }
-    }) 
-        fileURLArry.map(file => setPhoto((prevValue) => [...prevValue, file.url]))
-         console.log(fileURLArry);
-        console.log("imagem enviada com sucesso");
-      } catch (error) {
-        console.error(JSON.stringify(error));
-        console.log("deu erro ao enviar a imagem");
-      }
+    try {
+      const { data: fileURLArry } = await axios.post(
+        "/places/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multiplepart/form-data",
+          },
+        },
+      );
+      fileURLArry.map((file) =>
+        setPhoto((prevValue) => [...prevValue, file.url]),
+      );
+      console.log(fileURLArry);
+      console.log("imagem enviada com sucesso");
+    } catch (error) {
+      console.error(JSON.stringify(error));
+      console.log("deu erro ao enviar a imagem");
+    }
+  };
+  const deletePhoto = (fileUrl)=> {
+    const newPhotos = photo.filter(photo => photo !== fileUrl)
+    setPhoto(newPhotos)
 
-   
-    
-
+  }
+  const promotePhoto = (fileUrl) => {
+ const newPhotos =[fileUrl, ...photo.filter(photo => photo !== fileUrl)]
+    setPhoto(newPhotos)
   }
 
   return (
@@ -76,21 +85,71 @@ const PhotoUploader = ({ photo, setPhoto, photoLink, setPhotoLink }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-      {
-      photo.map(photo => (
-        console.log(photo),
-          <img
-         className="aspect-square rounded-2xl object-cover"
-         src={photo}
-         key={photo}
-         alt="image do lugar"/>
-         
-      ))}
+        {photo.map(
+          (photo) => (
+            console.log(photo),
+            (
+              <div className="relative">
+                <img
+                  className="aspect-square rounded-2xl object-cover"
+                  src={photo}
+                  key={photo}
+                  alt="image do lugar"
+                />
+                <div>
+                  <div className="flex gap-2 absolute right-1 bottom-2">
+                   
+                    <div onClick={() => promotePhoto(photo)} className="bg-gray-100 opacity-70 rounded-full p-1 transition hover:bg-primary-400 cursor-pointer ">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                        />
+                      </svg>
+                    </div>
+                     <div onClick={() => deletePhoto(photo)} className="bg-gray-100 opacity-70 rounded-full p-1 transition hover:bg-primary-400 cursor-pointer ">
+                      {" "}
+                       <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          ),
+        )}
         <label
           htmlFor="photo"
           className="flex aspect-square cursor-pointer items-center justify-center gap-2 rounded-2xl border border-gray-300"
         >
-          <input type="file" multiple onChange={uploadPhoto} name="" id="photo" className="hidden" />
+          <input
+            type="file"
+            multiple
+            onChange={uploadPhoto}
+            name=""
+            id="photo"
+            className="hidden"
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
