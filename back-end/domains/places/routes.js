@@ -43,6 +43,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 router.get('/', async (req, res) =>{
+  conectDB()
  try {
    const placeDocs = await Place.find()
    res.json(placeDocs)

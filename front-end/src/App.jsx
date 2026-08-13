@@ -7,6 +7,7 @@ import Account from "./components/pages/Account";
 import { BrowserRouter, Routes, Route, Link, Router } from "react-router-dom";
 import {UserContextProvider }from "./components/context/UserContext";
 import axios from "axios";
+import Place from "./components/pages/Place";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://localhost:3000";
@@ -29,6 +30,7 @@ function App() {
               path="/account/:subpage/:action?/:id?"
               element={<Account />}
             />
+             <Route path="/place/:id" element={<Place  />} />
           </Routes>
         </BrowserRouter>
       </UserContextProvider>

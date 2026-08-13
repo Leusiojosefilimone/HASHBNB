@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Item = ({place}) => {
   return (
   
-    <Link to="/item" className="flex flex-col p-2 gap-0.5">
+    <Link to={`/place/${place._id}`} className="flex flex-col p-2 gap-0.5">
         <img
         className="aspect-square rounded-2xl object-cover"
         src={place.photo[0]}

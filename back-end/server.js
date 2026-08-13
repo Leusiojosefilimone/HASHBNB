@@ -5,10 +5,11 @@ import cookieParser from "cookie-parser";
 import router from "./routes/index.js";
 import { fileURLToPath } from "url";
 import { dirname } from "node:path";
+import { conectDB } from "./config/db.js";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
-
+conectDB()
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));

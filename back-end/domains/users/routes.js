@@ -61,6 +61,7 @@ router.post("/login", async (req, res) => {
 
     if (userDoc) {
       const correctPassword = bcrypt.compareSync(password, userDoc.password);
+      console.log(Boolean(correctPassword))
 
       if (correctPassword) {
         const newUserObj = { name, email, _id };
@@ -71,11 +72,11 @@ router.post("/login", async (req, res) => {
          res.status(500).json("error ao asinar com JWT",error) 
         }
       } else {
-        res.json("senha invalida!");
+        res.status(400).json("senha invalida!");
       }
 
     } else {
-      res.json(400).json("usuario nao encontrado");
+      res.status(400).json("usuario nao encontrado");
     }
   } catch (error) {
     res.status(500).json({ message: "Erro ao buscar usuario" });
