@@ -15,7 +15,7 @@ const Item = ({place}) => {
         {place.description}
       </p>
       <p>
-        <span>{place.price}</span>
+       <span  className="font-bold"> {place.price} mt </span>por noite
       </p>
     </Link>
     

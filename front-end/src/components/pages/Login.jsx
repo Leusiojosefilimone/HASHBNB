@@ -19,7 +19,7 @@ const Login = () => {
         password,
       });
       setUser(userDoc);
-      console.log(userDoc)
+      
       setRedirect(true)
     } else {
       alert("voce precisa preechenr o email e a senha");

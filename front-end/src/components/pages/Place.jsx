@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { data, Link, useParams } from "react-router-dom";
 import { UseUserContext } from "../context/UserContext";
 import Perk from "../Perk";
+import Booking from "../Booking";
 
 const Place = () => {
   const { id } = useParams();
@@ -11,7 +12,38 @@ const Place = () => {
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [guest, setGuest] = useState("");
+  const [booking, setBooking] = useState(null);
   const { user } = UseUserContext();
+
+  const numberOfDays = (date1, date2) => {
+    const date1GMT = date1 + "GMT+02:00";
+    const date2GMT = date2 + "GMT+02:00";
+
+    const dateCheckin = new Date(date1GMT);
+    const dateCheckout = new Date(date2GMT);
+    console.log(
+      (dateCheckout.getTime() - dateCheckin.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    return (
+      (dateCheckout.getTime() - dateCheckin.getTime()) / (1000 * 60 * 60 * 24)
+    );
+  };
+
+  useEffect(() => {
+    if (place) {
+      const axiosGetBooking = async () => {
+        const { data } = await axios.get("/bookings");
+        setBooking(
+          data.filter((booking) => {
+            return booking.place._id === place._id;
+          })[0],
+      );
+      };
+      axiosGetBooking();
+    }
+  }, [place]);
+  
 
   useEffect(() => {
     if (id) {
@@ -29,9 +61,28 @@ const Place = () => {
       : document.body.classList.remove("overflow-hidden");
   }, [overlay]);
 
-  const handleBooking = () => {
+  const handleBooking = async (e) => {
     e.preventDefault();
+
     if (checkin && checkout && guest) {
+      const nights = numberOfDays(checkin, checkout);
+
+      const bookingObj = {
+        place: id,
+        user: user._id,
+        price: place.price,
+        totalprice: place.price * nights,
+        checkin,
+        checkout,
+        guest,
+        nights: nights,
+      };
+
+      try {
+        const { data } = await axios.post("/bookings", bookingObj);
+        console.log("estou qui");
+        console.log(data);
+      } catch (error) {}
     } else {
       alert("preencha todas as informacoes");
     }
@@ -40,10 +91,10 @@ const Place = () => {
   if (!place) return <></>;
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col  gap-6 px-5 py-5 sm:p-5">
+    <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-5 sm:p-5">
       {/*container de titulo */}
       <div className="flex flex-col gap-1">
-        <div className=" text-2xl md:text-3xl font-bold">{place.title}</div>
+        <div className="text-2xl font-bold md:text-3xl">{place.title}</div>
         <div className="flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -68,9 +119,10 @@ const Place = () => {
           <p>{place.adress}</p>
         </div>
       </div>
+      {booking ? <Booking booking={booking} place={true} /> : ""}
 
       {/*grid container */}
-      <div className="relative grid aspect-3/2  gap-4 overflow-hidden rounded-2xl sm:grid-cols-[2fr_1fr] sm:grid-rows-2  ">
+      <div className="relative grid aspect-3/2 gap-4 overflow-hidden rounded-2xl sm:grid-cols-[2fr_1fr] sm:grid-rows-2">
         {place.photo
           .filter((photo, index) => index < 3)
           .map((photo, index) => (
@@ -105,20 +157,21 @@ const Place = () => {
       </div>
 
       {/*colunas */}
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="order-1 md:order-0 flex flex-col gap-4 p-4">
+      <div className={`grid ${booking ? "" : "grid-cols-1 md:grid-cols-2 "}`}>
+        <div className="order-1 flex flex-col gap-4 p-4 md:order-0">
           <div>
-            <p className="m-1 text-1xl md:text-2xl font-bold">Descrição</p>
+            <p className="text-1xl m-1 font-bold md:text-2xl">Descrição</p>
             <p>{place.description}</p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-2xl font-bold">Diferenciais</p>
             <div>
               {place.perks.map((perk) => (
-                <div className="flex gap-3"> <Perk perk={perk}/></div>
-              )
-               
-              )}
+                <div className="flex gap-3">
+                  {" "}
+                  <Perk perk={perk} />
+                </div>
+              ))}
             </div>
           </div>
           <div>
@@ -130,7 +183,7 @@ const Place = () => {
             </div>
           </div>
         </div>
-        <form className="self-center justify-self-center rounded-2xl mb-1 border border-gray-200 px-8 py-4">
+        {booking ? "" : <form className="mb-1 self-center justify-self-center rounded-2xl border border-gray-200 px-8 py-4">
           <p className="mb-1 text-center text-2xl font-bold">
             {" "}
             Preco: R${place.price}
@@ -179,22 +232,20 @@ const Place = () => {
           </div>
           {user ? (
             <button
-              onClick={handleBooking}
+              onClick={(e) => handleBooking(e)}
               className="bg-primary-400 w-full cursor-pointer rounded-full border border-gray-300 py-2 font-semibold text-white"
             >
               Reservar
             </button>
           ) : (
             <Link to="/login">
-              <button
-                onClick={handleBooking}
-                className="bg-primary-400 w-full cursor-pointer rounded-full border border-gray-300 py-2 font-semibold text-white"
-              >
+              <button className="bg-primary-400 w-full cursor-pointer rounded-full border border-gray-300 py-2 font-semibold text-white">
                 Faca seu login
               </button>
             </Link>
           )}
-        </form>
+        </form>}
+        
         {/*extras */}
         <div className="rounded-2xl bg-gray-100 p-4">
           <p className="m-1 text-2xl font-bold">Informacoes extras</p>
@@ -207,11 +258,11 @@ const Place = () => {
         className={`${overlay ? "flex" : "hidden"} fixed inset-0 items-start overflow-y-auto bg-black text-white`}
       >
         <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-3">
-          <div className="grid  sm:grid-cols-2 gap-4 p-2">
+          <div className="grid gap-4 p-2 sm:grid-cols-2">
             {place.photo.map((photo, index) => (
               <img
                 key={index}
-                className="aspect-square w-full m-1 cursor-pointer object-cover"
+                className="m-1 aspect-square w-full cursor-pointer object-cover"
                 src={place.photo[index]}
                 alt="imagen da acomodacao"
               />

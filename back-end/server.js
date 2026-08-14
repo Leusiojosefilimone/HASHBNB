@@ -9,7 +9,7 @@ import { conectDB } from "./config/db.js";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
-conectDB()
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));

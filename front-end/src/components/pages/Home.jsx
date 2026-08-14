@@ -8,7 +8,6 @@ const Home = () => {
     useEffect(()=> {
       const axiosGetPlaces = async()=>{
         const {data} = await axios.get('/places')
-        console.log(data)
         setPlaces(data)
       }
       axiosGetPlaces()
