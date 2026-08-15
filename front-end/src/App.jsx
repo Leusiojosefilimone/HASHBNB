@@ -10,7 +10,7 @@ import axios from "axios";
 import Place from "./components/pages/Place";
 
 
-axios.defaults.baseURL = import.meta.env.MODE === "development" ? "http://localhost:3000/api" : "https://hashbnb-24q5.onrender.com/";
+axios.defaults.baseURL = import.meta.env.MODE === "development" ? "http://localhost:3000/api" : "https://hashbnb-24q5.onrender.com/api";
 axios.defaults.withCredentials = true;
 console.log(import.meta.env);
 
