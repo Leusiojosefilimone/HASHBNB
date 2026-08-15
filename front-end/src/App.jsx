@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import Item from "./components/item";
+import Item from "./components/Item";
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
