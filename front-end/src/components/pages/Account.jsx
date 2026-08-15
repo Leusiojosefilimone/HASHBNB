@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import AccontProfile from "../accontProfile";
+import AccontProfile from "../AccontProfile";
 import { UseUserContext } from "../context/UserContext";
 import AccountPlaces from "../AccountPlaces";
 import AccountBookings from "../AccountBookings";
